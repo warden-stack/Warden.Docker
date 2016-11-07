@@ -1,0 +1,96 @@
+version: "2"
+
+services:
+  start_dependencies:
+    image: dadarek/wait-for-dependencies
+    depends_on:
+      - mongo
+      - rabbitmq
+    command: rabbitmq:5672
+
+  api:
+    image: wardenstack/warden.api
+    links:
+      - rabbitmq
+      - storage-service
+    ports:
+      - '5000:5000'
+
+  features-service:
+    image: wardenstack/warden.services.features
+    links:
+      - mongo
+      - rabbitmq
+    ports:
+      - '5057:5057'  
+
+  operations-service:
+    image: wardenstack/warden.services.operations
+    links:
+      - mongo
+      - rabbitmq
+    ports:
+      - '5090:5090'  
+
+  organizations-service:
+    image: wardenstack/warden.services.organizations
+    links:
+      - mongo
+      - rabbitmq
+    ports:
+      - '5052:5052'
+
+  spawn-service:
+    image: wardenstack/warden.services.spawn
+    links:
+      - mongo
+      - rabbitmq
+    ports:
+      - '5056:5056'
+
+  stats-service:
+    image: wardenstack/warden.services.stats
+    links:
+      - mongo
+      - rabbitmq
+    ports:
+      - '5055:5055'
+
+  users-service:
+    image: wardenstack/warden.services.users
+    links:
+      - mongo
+      - rabbitmq
+    ports:
+      - '5051:5051'
+
+  wardenchecks-service:
+    image: wardenstack/warden.services.wardenchecks
+    links:
+      - mongo
+      - rabbitmq
+    ports:
+      - '5053:5053'
+
+  storage-service:
+    image: wardenstack/warden.services.storage
+    links:
+      - mongo
+      - rabbitmq
+      - users-service
+      - operations-service
+    ports:
+      - '5050:5050'  
+
+  mongo:
+    image: mongo
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - '27017:27017'
+
+  rabbitmq:
+    image: rabbitmq:3.6.5-management
+    ports:
+      - '5672:5672'
+      - '15672:15672'
