@@ -16,6 +16,29 @@ services:
     ports:
       - '5000:5000'
 
+  storage-service:
+    image: wardenstack/warden.services.storage
+    depends_on:
+      - features-service
+      - operations-service
+      - organizations-service
+      - spawn-service
+      - stats-service
+      - users-service
+      - wardenchecks-service
+    links:
+      - mongo
+      - rabbitmq
+      - features-service
+      - operations-service
+      - organizations-service
+      - spawn-service
+      - stats-service
+      - users-service
+      - wardenchecks-service
+    ports:
+      - '5050:5050'  
+
   features-service:
     image: wardenstack/warden.services.features
     links:
@@ -71,16 +94,6 @@ services:
       - rabbitmq
     ports:
       - '5053:5053'
-
-  storage-service:
-    image: wardenstack/warden.services.storage
-    links:
-      - mongo
-      - rabbitmq
-      - users-service
-      - operations-service
-    ports:
-      - '5050:5050'  
 
   mongo:
     image: mongo

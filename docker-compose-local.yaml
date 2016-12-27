@@ -10,11 +10,36 @@ services:
 
   api:
     build: ./Warden.Api/Warden.Api
+    depends_on:
+      - storage-service
     links:
       - rabbitmq
       - storage-service
     ports:
       - '5000:5000'
+
+  storage-service:
+    build: ./Warden.Services.Storage/Warden.Services.Storage
+    depends_on:
+      - features-service
+      - operations-service
+      - organizations-service
+      - spawn-service
+      - stats-service
+      - users-service
+      - wardenchecks-service
+    links:
+      - mongo
+      - rabbitmq
+      - features-service
+      - operations-service
+      - organizations-service
+      - spawn-service
+      - stats-service
+      - users-service
+      - wardenchecks-service
+    ports:
+      - '5050:5050' 
 
   features-service:
     build: ./Warden.Services.Features/Warden.Services.Features
@@ -70,18 +95,8 @@ services:
       - mongo
       - rabbitmq
     ports:
-      - '5053:5053'
+      - '5053:5053' 
 
-  storage-service:
-    build: ./Warden.Services.Storage/Warden.Services.Storage
-    links:
-      - mongo
-      - rabbitmq
-      - users-service
-      - operations-service
-    ports:
-      - '5050:5050'  
-    
   web:
     build: ./Warden.Web
     links:
