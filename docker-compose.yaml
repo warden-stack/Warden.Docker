@@ -89,6 +89,35 @@ services:
     ports:
       - '5055:5055'
 
+  supervisor-service:
+    build: wardenstack/warden.services.supervisor
+    depends_on:
+      - api
+      - features-service
+      - operations-service
+      - organizations-service
+      - pusher-service
+      - spawn-service
+      - stats-service
+      - storage-service
+      - users-service
+      - wardenchecks-service
+    links:
+      - mongo
+      - rabbitmq
+      - api
+      - features-service
+      - operations-service
+      - organizations-service
+      - pusher-service
+      - spawn-service
+      - stats-service
+      - storage-service
+      - users-service
+      - wardenchecks-service
+    ports:
+      - '5070:5070'
+
   users-service:
     image: wardenstack/warden.services.users
     links:
