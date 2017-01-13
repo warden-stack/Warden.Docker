@@ -6,6 +6,7 @@ services:
     depends_on:
       - mongo
       - rabbitmq
+      - redis
     command: rabbitmq:5672
 
   api:
@@ -23,8 +24,7 @@ services:
     depends_on:
       - features-service
       - operations-service
-      - organizations-service
-      
+      - organizations-service     
       - spawn-service
       - stats-service
       - users-service
@@ -48,6 +48,7 @@ services:
     links:
       - mongo
       - rabbitmq
+      - redis
     ports:
       - '5057:5057'  
 
@@ -139,7 +140,7 @@ services:
   mongo:
     image: mongo
     volumes:
-      - ./data/db:/data/db
+      - ./mongo/db:/mongo/db
     ports:
       - '27017:27017'
 
@@ -148,3 +149,10 @@ services:
     ports:
       - '5672:5672'
       - '15672:15672'
+
+  redis:
+    image: redis
+    volumes:
+    - ./data:/data
+    ports:
+      - '6379:6379'

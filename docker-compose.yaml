@@ -46,6 +46,7 @@ services:
     links:
       - mongo
       - rabbitmq
+      - redis
     ports:
       - '5057:5057'  
 
@@ -153,3 +154,10 @@ services:
     ports:
       - '5672:5672'
       - '15672:15672'
+
+  redis:
+    image: redis
+    volumes:
+    - ./data:/data
+    ports:
+      - '6379:6379'

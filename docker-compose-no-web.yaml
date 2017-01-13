@@ -22,7 +22,7 @@ services:
       - features-service
       - operations-service
       - organizations-service
-      - pusher-service
+      - pusher-service     
       - spawn-service
       - stats-service
       - users-service
@@ -46,6 +46,7 @@ services:
     links:
       - mongo
       - rabbitmq
+      - redis
     ports:
       - '5057:5057'  
 
@@ -66,7 +67,7 @@ services:
       - '5052:5052'
 
   pusher-service:
-    image: wardenstack/warden.services.pusher
+    build: wardenstack/warden.services.pusher
     links:
       - mongo
       - rabbitmq
@@ -146,3 +147,10 @@ services:
     ports:
       - '5672:5672'
       - '15672:15672'
+
+  redis:
+    image: redis
+    volumes:
+    - ./data:/data
+    ports:
+      - '6379:6379'
