@@ -63,6 +63,14 @@ services:
     ports:
       - '5052:5052'
 
+  pusher-service:
+    image: wardenstack/warden.services.pusher
+    links:
+      - mongo
+      - rabbitmq
+    ports:
+      - '15000:15000'
+
   spawn-service:
     image: wardenstack/warden.services.spawn
     links:
@@ -80,7 +88,7 @@ services:
       - '5055:5055'
 
   supervisor-service:
-    build: wardenstack/warden.services.supervisor
+    image: wardenstack/warden.services.supervisor
     depends_on:
       - api
       - features-service

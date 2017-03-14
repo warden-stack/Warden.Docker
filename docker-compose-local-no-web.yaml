@@ -65,6 +65,14 @@ services:
     ports:
       - '5052:5052'
 
+  pusher-service:
+    image: ./Warden.Services.Organizations/Warden.Services.Pusher
+    links:
+      - mongo
+      - rabbitmq
+    ports:
+      - '15000:15000'
+
   spawn-service:
     build: ./Warden.Services.Spawn/Warden.Services.Spawn
     links:
